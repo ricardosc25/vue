@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +14,12 @@
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/crud', function () {
+    return view('crud');
+});
+
+Route::resource('users','UserController', ['except' => 'show','create','edit']);
 
 Route::get('mis-ideas','IdeaController@getIdeas');
 Route::post('guardar-idea','IdeaController@store');

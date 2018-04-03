@@ -5,19 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="csrf-token" content="{{ csrf_token() }}">﻿
         <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css')}}">
-        <title>Laravel - Componentes VUEjs</title>
+        <title>@yield('title')</title>
     </head>
     <body>
 
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <div id="app">
+            
+            @yield('content')
 
-                        <idea></idea>
-                    </div>
-                </div>
-            </div>
         </div>
 
 
