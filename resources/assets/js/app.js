@@ -20,7 +20,15 @@ import toastr from "toastr"
 Vue.use(VuejsDialog);
 Vue.component('idea', require('./components/Idea.vue'));
 
-const user = new Vue({
+if (document.getElementById ('app')) { 
+	new Vue({
+		el: '#app'
+	}); 
+}
+
+
+if (document.getElementById('crud')) {
+	new Vue({
 
 		el: "#crud",
 
@@ -61,13 +69,15 @@ const user = new Vue({
         	},
 
         	editarUsuario: function(user){
-        		this.fillUser.id = user.id;
+        		this.fillUser.id = user.id; //Llenamos la variable filluser que se encuentra en data.
         		this.fillUser.nombre = user.nombre;
         		$('#edit').modal('show');
         	},
 
         	actualizarUsuario: function(fillUser){
         		var url = 'users/' + fillUser.id;
+                //Para poder enviar el id al controlador se deben como parametro
+                //Los datos que tiene cargado la variable fillUser en el array Data.
         		axios.put(url, this.fillUser).then(response => {
         			this.getUsers();
         			this.fillUser = {'id': '', 'nombre': ''};
@@ -118,7 +128,7 @@ const user = new Vue({
 		        // This will be triggered when user clicks on cancel
 		    });
         	}
-        }
+        } 
+});	
+}
 
-    
-});

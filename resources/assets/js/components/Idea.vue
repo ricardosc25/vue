@@ -30,12 +30,13 @@
     import toastr from 'toastr' //Alertas con mejores disenos
     import moment from 'moment' //Formatear fechas
 
-    moment.lang('es') //Colocamos las fechas en espanol.
+    moment.locale('es') //Colocamos las fechas en espanol.
 
     export default {
         data(){
             return {
                 ideas: [],
+                newIdea: '',
             }
         },
 

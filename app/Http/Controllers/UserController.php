@@ -56,6 +56,9 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'nombre' => 'bail|required|max:60|min:4'
+        ]);
         User::find($id)->update($request->all());
         return ;
 

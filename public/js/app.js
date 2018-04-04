@@ -30659,111 +30659,120 @@ window.Vue = __webpack_require__(161);
 Vue.use(__WEBPACK_IMPORTED_MODULE_1_vuejs_dialog___default.a);
 Vue.component('idea', __webpack_require__(165));
 
-var user = new Vue({
+if (document.getElementById('app')) {
+  new Vue({
+    el: '#app'
+  });
+}
+
+if (document.getElementById('crud')) {
+  new Vue({
 
     el: "#crud",
 
     data: function data() {
-        return {
-            users: [],
-            newUser: '',
-            fillUser: { 'id': '', 'nombre': '' },
-            errors: []
-        };
+      return {
+        users: [],
+        newUser: '',
+        fillUser: { 'id': '', 'nombre': '' },
+        errors: []
+      };
     },
 
 
     created: function created() {
-        this.getUsers();
+      this.getUsers();
     },
 
     methods: {
-        getUsers: function getUsers() {
-            var _this = this;
+      getUsers: function getUsers() {
+        var _this = this;
 
-            var urlUsers = 'users';
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(urlUsers).then(function (response) {
-                _this.users = response.data.users.data;
-            });
-        },
+        var urlUsers = 'users';
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get(urlUsers).then(function (response) {
+          _this.users = response.data.users.data;
+        });
+      },
 
-        crearUsuario: function crearUsuario() {
-            var _this2 = this;
+      crearUsuario: function crearUsuario() {
+        var _this2 = this;
 
-            var url = 'users';
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, {
-                nombre: this.newUser
-            }).then(function (response) {
-                _this2.getUsers();
-                _this2.newUser = '';
-                _this2.errors = [];
-                $('#CrearUsuario').modal('hide');
-                __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Usuario creado con exito');
+        var url = 'users';
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, {
+          nombre: this.newUser
+        }).then(function (response) {
+          _this2.getUsers();
+          _this2.newUser = '';
+          _this2.errors = [];
+          $('#CrearUsuario').modal('hide');
+          __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Usuario creado con exito');
+        }).catch(function (error) {
+          _this2.errors = error.response.data;
+        });
+      },
+
+      editarUsuario: function editarUsuario(user) {
+        this.fillUser.id = user.id; //Llenamos la variable filluser que se encuentra en data.
+        this.fillUser.nombre = user.nombre;
+        $('#edit').modal('show');
+      },
+
+      actualizarUsuario: function actualizarUsuario(fillUser) {
+        var _this3 = this;
+
+        var url = 'users/' + fillUser.id;
+        //Para poder enviar el id al controlador se deben como parametro
+        //Los datos que tiene cargado la variable fillUser en el array Data.
+        __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put(url, this.fillUser).then(function (response) {
+          _this3.getUsers();
+          _this3.fillUser = { 'id': '', 'nombre': '' };
+          _this3.errors = [];
+          $('#edit').modal('hide');
+          __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Se actualizaron los datos del usuario');
+        }).catch(function (error) {
+          _this3.errors = error.response.data;
+        });
+      },
+
+      eliminarUsuario: function eliminarUsuario(user) {
+        var _this4 = this;
+
+        var message = "Are you sure?";
+        var options = {
+          html: false, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
+          loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
+          reverse: false, // switch the button positions (left to right, and vise versa)
+          okText: 'Continue',
+          cancelText: 'Close',
+          animation: 'zoom', // Available: "zoom", "bounce", "fade"
+          type: 'basic', // coming soon: 'soft', 'hard'
+          verification: 'continue', // for hard confirm, user will be prompted to type this to enable the proceed button
+          verificationHelp: 'Type "[+:verification]" below to confirm', // Verification help text. [+:verification] will be matched with 'options.verification' (i.e 'Type "continue" below to confirm')
+          clicksCount: 3, // for soft confirm, user will be asked to click on "proceed" btn 3 times before actually proceeding
+          backdropClose: false // set to true to close the dialog when clicking outside of the dialog window, i.e. click landing on the mask 
+        };
+
+        this.$dialog.confirm(message, options).then(function (dialog) {
+          //Ok
+          setTimeout(function () {
+            //Eliminamos el usuario
+            var url = 'users/' + user.id;
+            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(url).then(function (response) {
+              _this4.getUsers();
+              __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Usuario eliminado con exito');
             }).catch(function (error) {
-                _this2.errors = error.response.data;
+              __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.error('No se pudo eliminar el usuario');
             });
-        },
 
-        editarUsuario: function editarUsuario(user) {
-            this.fillUser.id = user.id;
-            this.fillUser.nombre = user.nombre;
-            $('#edit').modal('show');
-        },
-
-        actualizarUsuario: function actualizarUsuario(fillUser) {
-            var _this3 = this;
-
-            var url = 'users/' + fillUser.id;
-            __WEBPACK_IMPORTED_MODULE_0_axios___default.a.put(url, this.fillUser).then(function (response) {
-                _this3.getUsers();
-                _this3.fillUser = { 'id': '', 'nombre': '' };
-                _this3.errors = [];
-                $('#edit').modal('hide');
-                __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Se actualizaron los datos del usuario');
-            }).catch(function (error) {
-                _this3.errors = error.response.data;
-            });
-        },
-
-        eliminarUsuario: function eliminarUsuario(user) {
-            var _this4 = this;
-
-            var message = "Are you sure?";
-            var options = {
-                html: false, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
-                loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
-                reverse: false, // switch the button positions (left to right, and vise versa)
-                okText: 'Continue',
-                cancelText: 'Close',
-                animation: 'zoom', // Available: "zoom", "bounce", "fade"
-                type: 'basic', // coming soon: 'soft', 'hard'
-                verification: 'continue', // for hard confirm, user will be prompted to type this to enable the proceed button
-                verificationHelp: 'Type "[+:verification]" below to confirm', // Verification help text. [+:verification] will be matched with 'options.verification' (i.e 'Type "continue" below to confirm')
-                clicksCount: 3, // for soft confirm, user will be asked to click on "proceed" btn 3 times before actually proceeding
-                backdropClose: false // set to true to close the dialog when clicking outside of the dialog window, i.e. click landing on the mask 
-            };
-
-            this.$dialog.confirm(message, options).then(function (dialog) {
-                //Ok
-                setTimeout(function () {
-                    //Eliminamos el usuario
-                    var url = 'users/' + user.id;
-                    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.delete(url).then(function (response) {
-                        _this4.getUsers();
-                        __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.success('Usuario eliminado con exito');
-                    }).catch(function (error) {
-                        __WEBPACK_IMPORTED_MODULE_2_toastr___default.a.error('No se pudo eliminar el usuario');
-                    });
-
-                    dialog.close();
-                }, 2500);
-            }).catch(function () {//False
-                // This will be triggered when user clicks on cancel
-            });
-        }
+            dialog.close();
+          }, 2500);
+        }).catch(function () {//False
+          // This will be triggered when user clicks on cancel
+        });
+      }
     }
-
-});
+  });
+}
 
 /***/ }),
 /* 140 */
@@ -64089,12 +64098,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  //Alertas con mejores disenos
  //Formatear fechas
 
-__WEBPACK_IMPORTED_MODULE_2_moment___default.a.lang('es'); //Colocamos las fechas en espanol.
+__WEBPACK_IMPORTED_MODULE_2_moment___default.a.locale('es'); //Colocamos las fechas en espanol.
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            ideas: []
+            ideas: [],
+            newIdea: ''
         };
     },
 
